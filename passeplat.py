@@ -2,7 +2,7 @@ import os
 from flask import Flask, request, Response
 import requests
 app = Flask(__name__)
-API_ROOT_URL = "https://api.heroku.com/"
+API_ROOT_URL = os.environ.get("API_ROOT_URL")
 
 # uses ~./netrc otherwise which might interfere with your requests
 requests.defaults.defaults['trust_env'] = False
