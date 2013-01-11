@@ -32,10 +32,9 @@ def proxy(path=""):
 	print clean_data
 
 	response = requests.request(request.method, API_ROOT_URL + path, headers=clean_headers,
-			data=clean_data)
-
-	print response.headers
-	return Response(response=response.text, status=response.headers['status'], headers=response.headers)
+			data=clean_data, params=request.args.to_dict())
+	response.headers['Access-Control-Allow-Origin'] = '*'
+	return Response(response=response.text, status=("%d %s" % (response.status_code, response.raw.reason)), headers=response.headers)
 
 
 if __name__ == "__main__":
