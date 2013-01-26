@@ -4,12 +4,12 @@ import requests
 app = Flask(__name__)
 API_ROOT_URL = os.environ.get("API_ROOT_URL")
 
-# uses ~./netrc otherwise which might interfere with your requests
-requests.defaults.defaults['trust_env'] = False
-
 @app.route("/", methods=['GET', 'POST', 'DELETE', 'PUT'])
 @app.route("/<path:path>", methods=['GET', 'POST', 'DELETE', 'PUT'])
 def proxy(path=""):
+	s = requests.Session()
+	s.trust_env = False
+
 	clean_headers = {}
 	if 'Authorization' in request.headers:
 		clean_headers['Authorization'] = request.headers['Authorization']
@@ -32,7 +32,7 @@ def proxy(path=""):
 	print request.form
 	print clean_data
 
-	response = requests.request(request.method, API_ROOT_URL + path, headers=clean_headers,
+	response = s.request(request.method, API_ROOT_URL + path, headers=clean_headers,
 			data=clean_data, params=request.args.to_dict())
 	response.headers['Access-Control-Allow-Origin'] = '*'
 	return Response(response=response.text, status=("%d %s" % (response.status_code, response.raw.reason)), headers=response.headers)
