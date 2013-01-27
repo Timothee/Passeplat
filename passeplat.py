@@ -1,6 +1,10 @@
 import os
 from flask import Flask, request, Response
 import requests
+from FlaskRequests import RqRequest
+
+Flask.request_class = RqRequest
+
 app = Flask(__name__)
 API_ROOT_URL = os.environ.get("API_ROOT_URL")
 
@@ -9,31 +13,20 @@ API_ROOT_URL = os.environ.get("API_ROOT_URL")
 def proxy(path=""):
 	s = requests.Session()
 	s.trust_env = False
+	s.max_redirects = 10 # just in case: could you DoS a server otherwise?
 
-	clean_headers = {}
-	if 'Authorization' in request.headers:
-		clean_headers['Authorization'] = request.headers['Authorization']
-	if request.headers['Accept'] == 'application/xml':
-		clean_headers['Accept'] = 'application/xml'
-	else:
-		clean_headers['Accept'] = 'application/json'
-
-	# request.form is a Werkzeug MultiDict
-	# we want to create a string
-	clean_data = "" 
-	for k, v in request.form.iteritems():
-		clean_data += k + "=" + v + "&"
-
-	# clean_headers['Content-Length'] = str(int(clean_headers['Content-Length']) + 4)
 	print path
 	print request.method
 	print request.headers
-	print clean_headers
+	print request.rq_headers()
 	print request.form
-	print clean_data
+	print request.rq_data()
 
-	response = s.request(request.method, API_ROOT_URL + path, headers=clean_headers,
-			data=clean_data, params=request.args.to_dict())
+	response = s.request(method=request.method,
+						 url=API_ROOT_URL + path,
+						 headers=request.rq_headers(),
+						 data=request.rq_data(),
+						 params=request.rq_params())
 	response.headers['Access-Control-Allow-Origin'] = '*'
 	return Response(response=response.text, status=("%d %s" % (response.status_code, response.raw.reason)), headers=response.headers)
 
