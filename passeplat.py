@@ -13,6 +13,9 @@ CORS_DOMAIN = os.environ.get("CORS_DOMAIN", '*')
 @app.route("/", methods=['GET', 'POST', 'DELETE', 'PUT'])
 @app.route("/<path:path>", methods=['GET', 'POST', 'DELETE', 'PUT'])
 def proxy(path=""):
+    if not API_ROOT_URL:
+        return Response(status="500 Root URL Not Configured")
+
     s = requests.Session()
     s.trust_env = False
     s.max_redirects = 10 # just in case: could you DoS a server otherwise?
