@@ -7,6 +7,7 @@ Flask.request_class = RqRequest
 
 app = Flask(__name__)
 API_ROOT_URL = os.environ.get("API_ROOT_URL")
+CORS_DOMAIN = os.environ.get("CORS_DOMAIN", '*')
 
 
 @app.route("/", methods=['GET', 'POST', 'DELETE', 'PUT'])
@@ -28,7 +29,7 @@ def proxy(path=""):
                          headers=request.rq_headers(),
                          data=request.rq_data(),
                          params=request.rq_params())
-    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Origin'] = CORS_DOMAIN
     response.full_status = "%d %s" % (response.status_code, response.raw.reason)
     return Response(response=response.text,
                     status=response.full_status,
