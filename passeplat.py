@@ -7,7 +7,7 @@ Flask.request_class = RqRequest
 
 app = Flask(__name__)
 API_ROOT_URL = os.environ.get("API_ROOT_URL")
-CORS_DOMAIN = os.environ.get("CORS_DOMAIN", '*')
+CORS_DOMAINS = os.environ.get("CORS_DOMAINS")
 
 
 @app.route("/", methods=['GET', 'POST', 'DELETE', 'PUT'])
@@ -15,6 +15,10 @@ CORS_DOMAIN = os.environ.get("CORS_DOMAIN", '*')
 def proxy(path=""):
     if not API_ROOT_URL:
         return Response(status="500 Root URL Not Configured")
+    if not CORS_DOMAINS:
+        return Response(status="500 CORS Domains Not Configured")
+    else:
+        CORS_DOMAINS = CORS_DOMAINS.split(',')
 
     s = requests.Session()
     s.trust_env = False
