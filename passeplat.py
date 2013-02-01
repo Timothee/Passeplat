@@ -6,8 +6,8 @@ from FlaskRequests import RqRequest
 Flask.request_class = RqRequest
 
 app = Flask(__name__)
-API_ROOT_URL = os.environ.get("API_ROOT_URL")
-CORS_DOMAINS = os.environ.get("CORS_DOMAINS")
+API_ROOT_URL = os.environ.get('API_ROOT_URL')
+CORS_DOMAINS = os.environ.get('CORS_DOMAINS')
 
 
 @app.route("/", methods=['GET', 'POST', 'DELETE', 'PUT'])
@@ -44,7 +44,7 @@ def proxy(path=""):
 
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
+    port = int(os.environ.get('PORT', 5000))
     if port == 5000:
         app.debug = True
     app.run(host='0.0.0.0', port=port)
