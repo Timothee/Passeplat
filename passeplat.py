@@ -23,13 +23,6 @@ def proxy(path=""):
     s.trust_env = False
     s.max_redirects = 10 # just in case: could you DoS a server otherwise?
 
-    print path
-    print request.method
-    print request.headers
-    print request.rq_headers()
-    print request.form
-    print request.rq_data()
-
     response = s.request(method=request.method,
                          url=app.config['API_ROOT_URL'] + path,
                          headers=request.rq_headers(),
