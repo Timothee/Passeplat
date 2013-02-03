@@ -32,6 +32,20 @@ class PasseplatTestCase(unittest.TestCase):
         response = self.client.get('/status/404')
         assert response.status_code == 404
 
+    def test_methods(self):
+        response = self.client.get('/get')
+        assert response.status_code == 200
+        response = self.client.post('/post')
+        assert response.status_code == 200
+        response = self.client.put('/put')
+        assert response.status_code == 200
+        response = self.client.delete('/delete')
+        assert response.status_code == 200
+        response = self.client.get('/post')
+        assert response.status_code == 405
+        response = self.client.post('/put')
+        assert response.status_code == 405
+
     def test_redirects(self):
         response = self.client.get('/redirect/6')
         assert response.status_code == 200
