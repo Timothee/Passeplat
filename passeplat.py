@@ -37,7 +37,7 @@ def proxy(path=""):
 
     if request.method == 'OPTIONS':
         response.headers['Access-Control-Max-Age'] = "1" # for debugging purposes for now
-        response.headers['Accces-Control-Allow-Credentials'] = "true"
+        response.headers['Access-Control-Allow-Credentials'] = "true"
         response.headers['Access-Control-Allow-Methods'] = ', '.join(app.config['ALLOWED_HTTP_METHODS'])
 
     response.full_status = "%d %s" % (response.status_code, response.raw.reason)
