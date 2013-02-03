@@ -4,7 +4,7 @@ class RqRequest(Request):
         headers = {}
         if 'Authorization' in self.headers:
             headers['Authorization'] = self.headers['Authorization']
-        if self.headers['Accept'] == 'application/xml':
+        if self.headers.get('Accept') == 'application/xml':
             headers['Accept'] = 'application/xml'
         else:
             headers['Accept'] = 'application/json'
