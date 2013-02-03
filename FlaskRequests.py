@@ -8,7 +8,7 @@ class RqRequest(Request):
             headers['Accept'] = 'application/xml'
         else:
             headers['Accept'] = 'application/json'
-        return self.headers
+        return headers
 
     # request.form is a Werkzeug MultiDict
     # we want to create a string
