@@ -70,6 +70,20 @@ class PasseplatTestCase(unittest.TestCase):
         assert response.headers.get('Access-Control-Allow-Credentials') == "true"
         assert response.headers.get('Access-Control-Allow-Methods') == ', '.join(passeplat.app.config['ALLOWED_HTTP_METHODS'])
 
+    def test_response_headers(self):
+        response = self.client.get('/response-headers?headerfoo=bar&headerbaz=buzz%20and%20some')
+        assert response.headers.get('headerfoo') == 'bar'
+        assert response.headers.get('headerbaz') == 'buzz and some'
+
+    def test_request_headers(self):
+        response = self.client.get('/get', headers={'foo': 'bar', 'baz': 'buzz and some'})
+        assert '"Foo": "bar"' in response.data
+        assert '"Baz": "buzz and some"' in response.data
+
+    def test_basic_auth(self):
+        response = self.client.get('/basic-auth/myuser/mypassword')
+        assert response.status_code == 401
+
 
 if __name__ == '__main__':
     unittest.main()

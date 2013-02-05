@@ -2,12 +2,9 @@ from flask import Request, Response
 class RqRequest(Request):
     def rq_headers(self):
         headers = {}
-        if 'Authorization' in self.headers:
-            headers['Authorization'] = self.headers['Authorization']
-        if self.headers.get('Accept') == 'application/xml':
-            headers['Accept'] = 'application/xml'
-        else:
-            headers['Accept'] = 'application/json'
+        for k, v in self.headers:
+            if k.lower() != 'host': # httpbin goes kaput with localhost otherwise
+                headers[k] = v
         return headers
 
     # request.form is a Werkzeug MultiDict
