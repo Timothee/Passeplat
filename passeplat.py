@@ -25,7 +25,7 @@ def proxy(path=""):
 
     response = s.request(method=request.method,
                          url=app.config['API_ROOT_URL'] + path,
-                         headers=request.rq_headers(),
+                         headers=request.rq_headers(app.config['API_ROOT_URL']),
                          data=request.rq_data(),
                          params=request.rq_params())
 

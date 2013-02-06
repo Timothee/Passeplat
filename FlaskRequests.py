@@ -1,10 +1,14 @@
+from urlparse import urlparse
 from flask import Request, Response
+
 class RqRequest(Request):
-    def rq_headers(self):
+    def rq_headers(self, root_url):
         headers = {}
         for k, v in self.headers:
             if k.lower() != 'host': # httpbin goes kaput with localhost otherwise
                 headers[k] = v
+            else:
+                headers['Host'] = urlparse(root_url).netloc
         return headers
 
     # request.form is a Werkzeug MultiDict
