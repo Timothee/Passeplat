@@ -1,4 +1,5 @@
 import unittest
+import base64
 import passeplat
 
 
@@ -99,6 +100,10 @@ class PasseplatTestCase(unittest.TestCase):
     def test_basic_auth(self):
         response = self.client.get('/basic-auth/myuser/mypassword')
         assert response.status_code == 401
+        response = self.client.get('/basic-auth/myuser/mypassword',
+                headers={'Authorization': 'Basic ' +
+                    base64.b64encode('myuser:mypassword')})
+        assert response.status_code == 200
 
 
 if __name__ == '__main__':
