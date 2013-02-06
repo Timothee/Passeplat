@@ -8,7 +8,7 @@ Flask.request_class = RqRequest
 app = Flask(__name__)
 app.config['API_ROOT_URL'] = os.environ.get('API_ROOT_URL')
 app.config['CORS_DOMAINS'] = os.environ.get('CORS_DOMAINS')
-app.config['ALLOWED_HTTP_METHODS'] = ['GET', 'POST', 'DELETE', 'PUT', 'PATCH', 'OPTIONS']
+app.config['ALLOWED_HTTP_METHODS'] = ['HEAD', 'GET', 'POST', 'DELETE', 'PUT', 'PATCH', 'OPTIONS']
 
 
 @app.route("/", methods=app.config['ALLOWED_HTTP_METHODS'])
