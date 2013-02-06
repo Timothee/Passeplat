@@ -5,7 +5,8 @@ import passeplat
 class PasseplatTestCase(unittest.TestCase):
     def setUp(self):
         passeplat.app.testing = True
-        passeplat.app.config['API_ROOT_URL'] = "http://httpbin.org/"
+        passeplat.app.config['ROOT_HOST'] = "httpbin.org"
+        passeplat.app.config['API_ROOT_URL'] = "http://%s/" % passeplat.app.config['ROOT_HOST']
         passeplat.app.config['CORS_DOMAINS'] = "*"
         self.client = passeplat.app.test_client()
 
@@ -79,6 +80,14 @@ class PasseplatTestCase(unittest.TestCase):
         response = self.client.get('/get', headers={'foo': 'bar', 'baz': 'buzz and some'})
         assert '"Foo": "bar"' in response.data
         assert '"Baz": "buzz and some"' in response.data
+
+    def test_host_header(self):
+        response = self.client.get('/get', headers={'Host': 'localhost'})
+        assert response.status_code == 200
+        assert ('"Host": "%s"' % passeplat.app.config['ROOT_HOST']) in response.data
+        response = self.client.get('/get')
+        assert response.status_code == 200
+        assert ('"Host": "%s"' % passeplat.app.config['ROOT_HOST']) in response.data
 
     def test_basic_auth(self):
         response = self.client.get('/basic-auth/myuser/mypassword')

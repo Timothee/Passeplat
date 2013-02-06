@@ -5,7 +5,7 @@ class RqRequest(Request):
     def rq_headers(self, root_url):
         headers = {}
         for k, v in self.headers:
-            if k.lower() != 'host': # httpbin goes kaput with localhost otherwise
+            if k.lower() != 'host':
                 headers[k] = v
             else:
                 headers['Host'] = urlparse(root_url).netloc
